@@ -6,13 +6,14 @@ export RTE_SDK=~/intel-dpdk/dpdk-$DPDK_VER
 export MAKE_PAUSE=n
 
 if [ ! -d $RTE_SDK ]; then
-    if [ ! -f $RTE_SDK.tar.xz ]; then
+    if [ ! -f dpdk-$DPDK_VER.tar.xz ]; then
+        echo "Downloading DPDK..."
         wget https://fast.dpdk.org/rel/dpdk-$DPDK_VER.tar.xz
+        echo "Unpacking DPDK..."
+        tar xvf dpdk-$DPDK_VER.tar.xz
     fi
 fi
 
-echo "Unpacking DPDK..."
-tar xvf dpdk-$DPDK_VER.tar.xz
 
 echo "Building DPDK..."
 cd $RTE_SDK

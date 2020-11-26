@@ -8,14 +8,6 @@ export RTE_SDK=~/intel-dpdk/dpdk-$DPDK_VER
 export PCI_IF0="0000:01:00.0"
 export PCI_IF1="0000:01:00.1"
 
-if [ "$1" == "-u" ]; then
-    $RTE_SDK/usertools/dpdk-devbind.py -u $PCI_IF0
-    $RTE_SDK/usertools/dpdk-devbind.py -u $PCI_IF0
-    $RTE_SDK/usertools/dpdk-devbind.py -b ixgbe $PCI_IF0
-    $RTE_SDK/usertools/dpdk-devbind.py -b ixgbe $PCI_IF1
-    exit 0
-fi
-
 cd $PKTGEN_DIR
 if [ $UID -ne 0 ]; then
 	echo "You must run this script as root" >&2
@@ -34,13 +26,6 @@ if [ $? -eq 1 ]; then
 fi
 
 #grep -i huge /proc/meminfo
-modprobe uio
-echo "trying to remove old igb_uio module and may get an error message, ignore it"
-r=`lsmod |grep igb_uio`
-if [ $? -eq 1 ]; then
-    rmmod igb_uio
-fi
-insmod $RTE_SDK/$RTE_TARGET/kmod/igb_uio.ko
 
 $RTE_SDK/usertools/dpdk-devbind.py -b igb_uio $PCI_IF0
 $RTE_SDK/usertools/dpdk-devbind.py -b igb_uio $PCI_IF1
